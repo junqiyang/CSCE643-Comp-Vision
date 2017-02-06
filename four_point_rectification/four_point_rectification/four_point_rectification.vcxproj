@@ -160,6 +160,9 @@
   <ItemGroup>
     <ClCompile Include="4_point_rect.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Desktop\test.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
