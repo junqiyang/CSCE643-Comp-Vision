@@ -118,16 +118,11 @@ void visual_matrix(CvMat* A, int row, int col) {
 
 
 void project_image(Mat input, CvMat *H) {
-	CvMat *inv_H;
-	cvInvert(H, inv_H, CV_LU);
-
-
-
-
-
-	/*CvMat *Bound_input = cvCreateMat(3, 1, CV_64FC1);
+	CvMat *Bound_input = cvCreateMat(3, 1, CV_64FC1);
 	CvMat *Bound_output = cvCreateMat(3, 1, CV_64FC1);
 	Point2f new_4_bound[4];
+	CvMat *inv_H = cvCreateMat(3, 3, CV_64FC1);
+	cvInvert(H, inv_H, CV_LU);
 	cvmSet(Bound_input, 0, 0, 0);
 	cvmSet(Bound_input, 1, 0, 0);
 	cvmSet(Bound_input, 2, 0, 1);
@@ -184,27 +179,27 @@ void project_image(Mat input, CvMat *H) {
 	double scale = input.cols / w;
 	double w_out = input.cols;
 	double h_out = (int)(h * scale);
-	printf("original: %f, %f", (double)input.cols, (double)input.rows);
-	printf("transfor: %f, %f", w_out, h_out);
 
 	Mat H_mat = cvarrToMat(H);
-	Mat out_test = cv::Mat::zeros(h_out, w_out, CV_8UC3);
+
+	Mat out_test(h_out, w_out, CV_8UC3);
 	Mat original_H_cood(3, 1, CV_64FC1);
 	Mat transfor_H_cood(3, 1, CV_64FC1);
-	original_H_cood.at<double>(2, 0) = 1;
-	double step = 1 / scale;
+	original_H_cood.at<double>(2, 0) = 1.0;
+	double step = 1;
+	printf("scale: %f", step);
 	double x, y;
-
+	int count = 0;
 	for (int i = 0; i < out_test.cols; i++) {
-		original_H_cood.at<double>(0, 0) = (double)i * step + w_min;
+		original_H_cood.at<double>(0, 0) = i ;
 		for (int j = 0; j < out_test.rows; j++) {
-			original_H_cood.at<double>(1, 0) = (double)j * step + h_min;
-			transfor_H_cood = H_mat * original_H_cood;
+			original_H_cood.at<double>(1, 0) = j;
+			transfor_H_cood = H_mat.inv() * original_H_cood;
 			
 			x = transfor_H_cood.at<double>(0,0) / transfor_H_cood.at<double>(2, 0);
 			y = transfor_H_cood.at<double>(1,0) / transfor_H_cood.at<double>(2, 0);
-		
 			if (x < 0 || x > input.cols -1 || y < 0 || y > input.rows - 1) {
+				count++;
 				continue;
 			}
 			//http://blog.demofox.org/2015/08/15/resizing-images-with-bicubic-interpolation/
@@ -225,7 +220,9 @@ void project_image(Mat input, CvMat *H) {
 			}
 		}	
 	}
-	printf("size test: %f, %f", (double)out_test.cols, (double)out_test.rows);
+	printf("size test: %f, %f", out_test.cols, out_test);
+	printf("\n");
+	printf("counter: %f", (double)count);
 	imwrite("C:\\Users\\Roast\\Desktop\\current_implementation.jpg", out_test);
 
 
