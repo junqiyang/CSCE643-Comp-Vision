@@ -21,21 +21,9 @@ void on_mouse(int event, int x, int y, int, void*) {
 			if (counter > 1) {
 				line(image_input, Point2f(line_point[counter - 2].x, line_point[counter - 2].y), Point2f(line_point[counter - 1].x, line_point[counter - 1].y), CV_RGB(0, 255, 0), 2);
 			}
-		
 		}
-
 	}
-
 	imshow("window", image_input);
-
-
-
-
-
-
-
-
-
 }
 
 int main(int argc, char** argv) {
@@ -105,21 +93,22 @@ int main(int argc, char** argv) {
 				CvMat* H = line_infinity(line_point);
 				
 				CvMat* offset = cvCreateMat(3, 3, CV_64FC1);
-				cvmSet(H, 0, 0, 0.1);
-				cvmSet(H, 0, 1, 0);
-				cvmSet(H, 0, 2, 0);
-				cvmSet(H, 1, 0, 0);
-				cvmSet(H, 1, 1, 0.1);
-				cvmSet(H, 1, 2, 0);
-				cvmSet(H, 2, 0, 0);
-				cvmSet(H, 2, 1, 0);
-				cvmSet(H, 2, 2, 1);
-				cvMatMul(offset, H, H);
-
+				cvmSet(offset, 0, 0, 0.1);
+				cvmSet(offset, 0, 1, 0);
+				cvmSet(offset, 0, 2, 0);
+				cvmSet(offset, 1, 0, 0);
+				cvmSet(offset, 1, 1, 0.1);
+				cvmSet(offset, 1, 2, 0);
+				cvmSet(offset, 2, 0, 0);
+				cvmSet(offset, 2, 1, 0);
+				cvmSet(offset, 2, 2, 1);
+				cvMatMul(H, offset, H);
 				Mat H_mat = cvarrToMat(H);
 
+
+
 				warpPerspective(image_input, image_output, H_mat, image_input.size());
-				imwrite("C:\\Users\\roast_000\\Desktop\\line_infinity.jpg", image_output);
+				imwrite("C:\\Users\\roast_000\\Desktop\\line_.jpg", image_output);
 			}
 		}	
 	
