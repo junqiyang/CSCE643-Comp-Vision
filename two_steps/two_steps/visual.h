@@ -4,7 +4,6 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
-#include "visual.h"
 using namespace cv;
 
-Mat line_infinity(Point3d point_input[4]);
+void visual_matrix(Mat A, int row, int col);
