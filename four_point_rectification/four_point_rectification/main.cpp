@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
 	CvMat *H_matrix = cvCreateMat(3, 3, CV_64FC1);
 
-	char prob_num = '2';
+	char prob_num = '1';
 
 	if (argc >= 2) {
 		filename_input = argv[1];
@@ -81,38 +81,6 @@ int main(int argc, char** argv) {
 		imwrite("C:\\Users\\roast_000\\Desktop\\4_point.jpg", image_output);	
 	}
 
-	if (prob_num == '2') {
-		image_input = imread(filename_input, 1);
-		namedWindow("window", CV_WINDOW_AUTOSIZE);
-		imshow("window", image_input);
-		cvSetMouseCallback("window", on_mouse);	
-	
-		for (;;) {
-			uchar key = (uchar)waitKey();
-			if (key == 'r') {
-				CvMat* H = line_infinity(line_point);
-				
-				CvMat* offset = cvCreateMat(3, 3, CV_64FC1);
-				cvmSet(offset, 0, 0, 0.1);
-				cvmSet(offset, 0, 1, 0);
-				cvmSet(offset, 0, 2, 0);
-				cvmSet(offset, 1, 0, 0);
-				cvmSet(offset, 1, 1, 0.1);
-				cvmSet(offset, 1, 2, 0);
-				cvmSet(offset, 2, 0, 0);
-				cvmSet(offset, 2, 1, 0);
-				cvmSet(offset, 2, 2, 1);
-				cvMatMul(H, offset, H);
-				Mat H_mat = cvarrToMat(H);
-
-
-
-				warpPerspective(image_input, image_output, H_mat, image_input.size());
-				imwrite("C:\\Users\\roast_000\\Desktop\\line_.jpg", image_output);
-			}
-		}	
-	
-	}
 
 
 	return 0;
