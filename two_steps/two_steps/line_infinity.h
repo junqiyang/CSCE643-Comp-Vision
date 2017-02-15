@@ -7,4 +7,4 @@
 #include "visual.h"
 using namespace cv;
 
-Mat line_infinity(Point3d point_input[4]);
+Mat line_infinity(Point3d point_input[8]);

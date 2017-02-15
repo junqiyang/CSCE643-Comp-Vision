@@ -1,10 +1,11 @@
 #include "affline.h"
-
-Mat Affline_H(Point3d point_input[4], Mat H) {
+using namespace std;
+Mat Affline_H(Point3d point_input[8], Mat H) {
+	
 	Point3d l1 = point_input[0].cross(point_input[1]);
 	Point3d l2 = point_input[0].cross(point_input[2]);
-	Point3d m1 = point_input[3].cross(point_input[1]);
-	Point3d m2 = point_input[3].cross(point_input[2]);
+	Point3d m1 = point_input[4].cross(point_input[5]);
+	Point3d m2 = point_input[6].cross(point_input[7]);
 
 	Mat L1 = H * Mat(l1, true);
 	Mat L2 = H * Mat(l2, true);
@@ -16,6 +17,11 @@ Mat Affline_H(Point3d point_input[4], Mat H) {
 	m1 = Point3d(M1.at<double>(0), M1.at<double>(1), M1.at<double>(2));
 	m2 = Point3d(M2.at<double>(0), M2.at<double>(1), M2.at<double>(2));
 
+	cout << l1 << endl;
+	cout << l2 << endl;
+	cout << m1 << endl;
+	cout << m2 << endl;
+
 	Mat left = Mat(2, 2, CV_64FC1);
 	Mat Right = Mat(2, 1, CV_64FC1);
 
@@ -23,9 +29,12 @@ Mat Affline_H(Point3d point_input[4], Mat H) {
 	left.at<double>(0, 1) = l1.x * l2.y + l1.y * l2.x;
 	left.at<double>(1, 0) = m1.x * m2.x;
 	left.at<double>(1, 1) = m1.x * m2.y + m1.y * m2.x;
+	cout << left << endl;
 
 	Right.at<double>(0, 0) = -l1.y * l2.y;
-	Right.at<double>(0, 0) = -m1.y * m2.y;
+	Right.at<double>(1, 0) = -m1.y * m2.y;
+	cout << Right << endl;
+
 
 	Mat s = left.inv() * Right;
 	Mat S = Mat(2, 2, CV_64FC1);
@@ -39,7 +48,7 @@ Mat Affline_H(Point3d point_input[4], Mat H) {
 	pow(D2, 0.5, D);
 	D = Mat::diag(D);
 	Mat K = U * D * U.inv();
-
+	cout << K << endl;
 	Mat H_result = Mat(3, 3, CV_64FC1);
 	H_result.at<double>(0, 0) = K.at<double>(0, 0);
 	H_result.at<double>(0, 1) = K.at<double>(0, 1);

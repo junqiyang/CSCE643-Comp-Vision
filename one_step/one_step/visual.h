@@ -1,10 +1,10 @@
 #pragma once
-
+#pragma once
+#pragma once
 #include "opencv2/imgproc.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
-#include "visual.h"
 using namespace cv;
 
-Mat  Affline_H(Point3d point_input[8], Mat H);
+void visual_matrix(Mat A, int row, int col);

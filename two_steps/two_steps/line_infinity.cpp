@@ -1,6 +1,6 @@
 #include "Line_infinity.h"
 
-Mat line_infinity(Point3d point_input[4]) {
+Mat line_infinity(Point3d point_input[8]) {
 	Point3d l1 = point_input[0].cross(point_input[1]);
 	Point3d l2 = point_input[2].cross(point_input[3]);
 	Point3d l3 = point_input[0].cross(point_input[2]);
@@ -18,22 +18,6 @@ Mat line_infinity(Point3d point_input[4]) {
 	H.at<double>(2, 1) = VL.y;
 	H.at<double>(2, 2) = VL.z;
 
-//	visual_matrix(H, 3, 3);
-/*
-	CvMat * l = cvCreateMat(3, 1, CV_64FC1);
-	cvmSet(l, 0, 0, VL.x);
-	cvmSet(l, 1, 0, VL.y);
-	cvmSet(l, 2, 0, VL.z);
-
-	CvMat * test_l = cvCreateMat(3, 1, CV_64FC1);
-	CvMat * H_t = cvCreateMat(3, 3, CV_64FC1);
-	cvTranspose(H, H_t);
-	cvInvert(H_t, H_t);
-	cvMatMul(H_t, l, test_l);*/
-//	visual_matrix(H_t, 3, 3);
-//	visual_matrix(l, 3, 1);
-
-	//visual_matrix(test_l, 3, 1);
 	printf("Hp: \n");
 	visual_matrix(H, 3, 3);
 	return H;

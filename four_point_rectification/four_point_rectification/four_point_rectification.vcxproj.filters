@@ -24,18 +24,12 @@
     <ClCompile Include="image_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="line_infinity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="4_point_rect.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="image_wrap.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Line_infinity.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

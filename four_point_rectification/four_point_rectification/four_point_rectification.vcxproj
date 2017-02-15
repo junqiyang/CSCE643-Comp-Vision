@@ -160,13 +160,11 @@
   <ItemGroup>
     <ClCompile Include="4_point_rect.cpp" />
     <ClCompile Include="image_wrap.cpp" />
-    <ClCompile Include="line_infinity.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="4_point_rect.h" />
     <ClInclude Include="image_wrap.h" />
-    <ClInclude Include="Line_infinity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
