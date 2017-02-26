@@ -56,19 +56,20 @@ Mat one_step(Point3d point_input[20]) {
 	cout << "C:" << C << endl;
 	
 	Mat U, D, Ut;
-	SVD::compute(C, D, U, Ut, 0);
+	//SVD::compute(C, D, U, Ut, 0);
 
 	Mat KKt = C(Range(0, 2), Range(0, 2));
 	cout << "KKt: " << KKt << endl;
 
-	Mat D2;
-	SVD::compute(KKt, D2, U, Ut, 0);
+	SVD::compute(KKt, D, U, Ut, 0);
 	
 	
-	pow(D2, 0.5, D);
+	pow(D, 0.5, D);
 	D = Mat::diag(D);
 
-	Mat K = U * D * Ut;
+	Mat K_D = U * D;
+	Mat K(2, 2, CV_64FC1);
+	gemm(K_D, U, 1.0, NULL, 0, K, CV_GEMM_B_T);
 	std::cout << "K: " << K << std::endl;
 	
 	Mat v;

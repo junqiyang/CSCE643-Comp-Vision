@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 			if (counter > 20) {
 				Mat affline_H = one_step(line_point);
 				visual_matrix(affline_H, 3, 3);
-				warpPerspective(image_input, image_output, affline_H, cv::Size(3000, 3000));
+				warpPerspective(image_input, image_output, affline_H.inv(), cv::Size(3000, 3000));
 				imwrite("C:\\Users\\roast_000\\Desktop\\one_step.jpg", image_output);
 				return 0;
 			}
