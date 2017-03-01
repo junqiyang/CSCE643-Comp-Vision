@@ -6,12 +6,31 @@
 #include <fstream>
 using namespace cv;
 using namespace std;
+
+
+
 int main(int argc, char** argv) {
 	char* filename_input;
 	char* filename_input_2;
 	Mat image_input_1;
 	Mat image_input_2;
 	Mat image_output;
+
+	Mat Offset = Mat(3, 3, CV_64FC1);
+	Offset.at<double>(0, 0) = 1;
+	Offset.at<double>(0, 1) = 0;
+	Offset.at<double>(0, 2) = 0;
+	Offset.at<double>(1, 0) = 0;
+	Offset.at<double>(1, 1) = 1;
+	Offset.at<double>(1, 2) = 270;
+	Offset.at<double>(2, 0) = 0;
+	Offset.at<double>(2, 1) = 0;
+	Offset.at<double>(2, 2) = 1;
+
+
+
+
+
 
 	if (argc >= 2) {
 		filename_input = argv[2];
@@ -55,12 +74,13 @@ int main(int argc, char** argv) {
 
 		cout << H_r << endl;
 		Mat result;
-		warpPerspective(image_input_1, result, H_r, cv::Size(image_input_1.cols + image_input_2.cols, image_input_1.rows + image_input_1.rows));
-		cv::Mat half(result, cv::Rect(0, 0, image_input_2.cols, image_input_2.rows));
-		warpPerspective(image_input_1, image_output, H_r, cv::Size(3000, 3000));
+		warpPerspective(image_input_1, result, Offset*H_r, cv::Size(image_input_1.cols + image_input_2.cols+ image_input_2.cols, image_input_1.rows + image_input_1.rows));
+		
+		cv::Mat half(result, cv::Rect(0, 270, image_input_2.cols, image_input_2.rows));
+
 		image_input_2.copyTo(half);
 		imshow("Result", result);
-		imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\rresult_MLE.jpg", result);
+		imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\MLE.jpg", result);
 		ofstream myfile;
 		myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\H_MLE.txt");
 		myfile << H_r << endl;
