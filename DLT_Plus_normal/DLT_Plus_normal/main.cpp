@@ -1,7 +1,9 @@
 #include "DLT.h"
+#include <iostream>
+#include <fstream>
 using namespace cv;
 using namespace std;
-const int number = 10;
+const int number = 20;
 
 CvPoint2D64f old_point[number];
 CvPoint2D64f new_point[number];
@@ -24,7 +26,7 @@ void on_mouse(int event, int x, int y, int, void*) {
 		counter++;
 	}
 	else if (event == CV_EVENT_LBUTTONUP && counter <= 2*number && counter > number) {
-		circle(image_input_2, Point(x, y), 2, CV_RGB(255, 0, 0), -1);
+		circle(image_input_2, Point(x, y), 2, CV_RGB(0, 255, 0), -1);
 		if (counter < number*2 + 1) {
 			new_point[counter - number - 1].x = x;
 			new_point[counter - number - 1].y = y;
@@ -59,26 +61,115 @@ int main(int argc, char** argv) {
 		for (;;) {
 			uchar key = (uchar)waitKey();
 			if (counter > number * 2) {
+				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\input_1.jpg", image_input_1);
+				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\input_2.jpg", image_input_2);
 				CvMat *H = cvCreateMat(3, 3, CV_64FC1);
-			    Mat t1 =Normalization_DLT(number, old_point);
-				Mat t2 =Normalization_DLT(number, new_point);
+
+				ofstream myfile;
+				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\points.txt");
+
+				for (int i = 0; i < number; i++) {
+					myfile << (double)old_point[i].x << " " << (double)old_point[i].y << endl;
+					myfile << (double)new_point[i].x << " " << (double)new_point[i].y << endl;
+				}
+				for (int i = 0; i < number; i++) {
+					myfile <<"("<< (double)old_point[i].x << "," << (double)old_point[i].y << ") \Rightarrow ("<<(double)new_point[i].x << "," << (double)new_point[i].y<<")" << endl;
+				}
+
+
+				myfile.close();
+				
 				DLT(number, old_point, new_point, H);
 				Mat H_r = cvarrToMat(H);
-				H_r = t2.inv() * H_r * t1;
+				std::cout << "H:" << std::endl;
 				std::cout << H_r << std::endl;
-				Mat result;
 
-				warpPerspective(image_input_1, result, H_r, cv::Size(image_input_1.cols + image_input_2.cols, image_input_2.rows +image_input_1.rows));
-				imshow("Result", result);
-				waitKey(0);
+		
+				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\H.txt");
+				myfile << H_r << endl;
+				myfile.close();
+
+				Mat result;
+				warpPerspective(image_input_1, result, H_r, cv::Size(image_input_1.cols + image_input_2.cols, image_input_1.rows + image_input_1.rows));
 				cv::Mat half(result, cv::Rect(0, 0, image_input_2.cols, image_input_2.rows));
-				
 				//	warpPerspective(image_input_1, image_output, H_r, cv::Size(3000, 3000));
 				image_input_2.copyTo(half);
 				imshow("Result", result);
+				waitKey(0);
+				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\result_DLT.jpg", result);
+
+
+
+
+
+			    Mat t1 =Normalization_DLT(number, old_point);
+				Mat t2 =Normalization_DLT(number, new_point);
+				for (int i = 0; i < number; i++) {
+					printf("Point 1 (%f, %f) \n", (double)old_point[i].x, (double)old_point[i].y);
+					printf("Point 2 (%f, %f) \n", (double)new_point[i].x, (double)new_point[i].y);				
+				}
+				for (int i = 0; i < number; i++) {
+					myfile << "(" << (double)old_point[i].x << "," << (double)old_point[i].y << ") \Rightarrow (" << (double)new_point[i].x << "," << (double)new_point[i].y << ")" << endl;
+				}
+
+
+				DLT(number, old_point, new_point, H);
+				H_r = cvarrToMat(H);
+				std::cout << "h_bar" << std::endl;
+				std::cout << H_r << std::endl;
+				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\H_hat.txt");
+				myfile << H_r << endl;
+				myfile.close();
+				
+				
+				std::cout << "t1" << std::endl;
+				std::cout << t1 << std::endl;
+				std::cout << "t2" << std::endl;
+				std::cout << t2 << std::endl;
+				H_r = t2.inv() * H_r * t1;
+				std::cout << "H:" << std::endl;
+				std::cout << H_r << std::endl;
+				
+				
+				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\Ts.txt");
+				myfile << t1 << endl;
+				myfile << t2 << endl;
+				myfile.close();
+
+				warpPerspective(image_input_1, result, H_r, cv::Size(image_input_1.cols + image_input_2.cols, image_input_1.rows + image_input_1.rows));
+				imshow("Result", result);
+				waitKey(0);
+				cv::Mat half2(result, cv::Rect(0, 0, image_input_2.cols, image_input_2.rows));
+				
+				//	warpPerspective(image_input_1, image_output, H_r, cv::Size(3000, 3000));
+				image_input_2.copyTo(half2);
+				imshow("Result", result);
 
 				waitKey(0);
-				imwrite("C:\\Users\\roast_000\\Desktop\\result_DLT_normal.jpg", result);
+				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\result_DLT_normal.jpg", result);
+
+				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\normal_points.txt");
+
+				for (int i = 0; i < number; i++) {
+					myfile << (double)old_point[i].x <<" "<< (double)old_point[i].y <<endl;
+					myfile << (double)new_point[i].x <<" "<< (double)new_point[i].y <<endl;
+				}
+				myfile.close();
+
+
+				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\normal_H.txt");
+				myfile << H_r << endl;
+				myfile.close();
+
+
+				waitKey(0);
+
+
+
+
+
+
+
 				return 0;
 
 			}
