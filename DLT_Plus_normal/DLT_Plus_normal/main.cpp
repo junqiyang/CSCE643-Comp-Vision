@@ -55,8 +55,8 @@ int main(int argc, char** argv) {
 		image_input_2 = imread(filename_input, 1);
 		namedWindow("window", CV_WINDOW_AUTOSIZE);
 		imshow("window", image_input_1);
-		//		namedWindow("window", CV_WINDOW_AUTOSIZE);
-		//		imshow("window", image_input_2);
+		//namedWindow("window", CV_WINDOW_AUTOSIZE);
+		//imshow("window", image_input_2);
 		cvSetMouseCallback("window", on_mouse);
 		for (;;) {
 			uchar key = (uchar)waitKey();
@@ -72,19 +72,16 @@ int main(int argc, char** argv) {
 					myfile << (double)old_point[i].x << " " << (double)old_point[i].y << endl;
 					myfile << (double)new_point[i].x << " " << (double)new_point[i].y << endl;
 				}
-				for (int i = 0; i < number; i++) {
-					myfile <<"("<< (double)old_point[i].x << "," << (double)old_point[i].y << ") \Rightarrow ("<<(double)new_point[i].x << "," << (double)new_point[i].y<<")" << endl;
-				}
-
 
 				myfile.close();
-				
+
+				//DLT
+
 				DLT(number, old_point, new_point, H);
 				Mat H_r = cvarrToMat(H);
 				std::cout << "H:" << std::endl;
 				std::cout << H_r << std::endl;
-
-		
+	
 				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\H.txt");
 				myfile << H_r << endl;
 				myfile.close();
@@ -92,14 +89,13 @@ int main(int argc, char** argv) {
 				Mat result;
 				warpPerspective(image_input_1, result, H_r, cv::Size(image_input_1.cols + image_input_2.cols, image_input_1.rows + image_input_1.rows));
 				cv::Mat half(result, cv::Rect(0, 0, image_input_2.cols, image_input_2.rows));
-				//	warpPerspective(image_input_1, image_output, H_r, cv::Size(3000, 3000));
 				image_input_2.copyTo(half);
 				imshow("Result", result);
 				waitKey(0);
 				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\result_DLT.jpg", result);
 
 
-
+				//normalize DLT
 
 
 			    Mat t1 =Normalization_DLT(number, old_point);
@@ -176,19 +172,3 @@ int main(int argc, char** argv) {
 		}
 	}
 }
-/*
-
-
-		
-			
-			if (counter > 20) {
-				Mat affline_H = one_step(line_point);
-				visual_matrix(affline_H, 3, 3);
-				warpPerspective(image_input, image_output, affline_H.inv(), cv::Size(3000, 3000));
-				imwrite("C:\\Users\\roast_000\\Desktop\\one_step.jpg", image_output);
-				return 0;
-			}
-		}
-	}
-}
-*/

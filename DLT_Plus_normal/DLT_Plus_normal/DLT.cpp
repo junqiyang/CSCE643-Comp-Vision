@@ -26,13 +26,11 @@ void DLT(int n, CvPoint2D64f *p1, CvPoint2D64f *p2, CvMat *H) {
 		cvmSet(H, i / 3, i % 3, cvmGet(V, 8, i)/cvmGet(V, 8, 8));
 }
 
-
 Mat Normalization_DLT(int n, CvPoint2D64f * p) {
-	double scale, tx, ty;
+	double S, tx, ty;
 	double meanx, meany;
-	double value;
-	int i;
-	
+	double sum;
+	int i;	
 	meanx = 0;
 	meany = 0;
 	for (int i = 0; i < n; i++) {
@@ -41,28 +39,26 @@ Mat Normalization_DLT(int n, CvPoint2D64f * p) {
 	}
 	meanx /= (double)n;
 	meany /= (double)n;
-
-	value = 0;
+	sum = 0;
 	for (int i = 0; i < n; i++) {
-		value += sqrt(pow(p[i].x - meanx, 2.0) + pow(p[i].y - meany, 2.0));
+		sum += sqrt(pow(p[i].x - meanx, 2.0) + pow(p[i].y - meany, 2.0));
 	}
-	value /= (double)n;
+	sum /= (double)n;
 
-	scale = sqrt(2.0) / value;
-	tx = -scale * meanx;
-	ty = -scale * meany;
+	S = sqrt(2.0) / sum;
+	tx = -S * meanx;
+	ty = -S * meany;
 
 	Mat H = Mat(3, 3, CV_64FC1);
-	H.at<double>(0, 0) = scale;
+	H.at<double>(0, 0) = S;
 	H.at<double>(0, 1) = 0;
 	H.at<double>(0, 2) = tx;
 	H.at<double>(1, 0) = 0;
-	H.at<double>(1, 1) = scale;
+	H.at<double>(1, 1) = S;
 	H.at<double>(1, 2) = ty;
 	H.at<double>(2, 0) = 0;
 	H.at<double>(2, 1) = 0;
 	H.at<double>(2, 2) = 1.0;
-
 
 	Mat x = Mat(3, 1, CV_64FC1);
 	Mat xp = Mat(3, 1, CV_64FC1);

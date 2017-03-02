@@ -6,5 +6,4 @@
 using namespace cv;
 
 void DLT(int n, CvPoint2D64f *p1, CvPoint2D64f *p2, CvMat *H);
-
 Mat Normalization_DLT(int n, CvPoint2D64f * p);

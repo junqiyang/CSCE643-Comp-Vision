@@ -27,26 +27,21 @@ int main(int argc, char** argv) {
 	Offset.at<double>(2, 1) = 0;
 	Offset.at<double>(2, 2) = 1;
 
-
-
-
-
-
 	if (argc >= 2) {
 		filename_input = argv[2];
 		filename_input_2 = argv[1];
 		image_input_1 = imread(filename_input_2, 1);
 		image_input_2 = imread(filename_input, 1);
 		Mat H_r = Mat(3, 3, CV_64FC1);
-		H_r.at<double>(0, 0) = 1.0091;
+		H_r.at<double>(0, 0) = 1.0089;
 		H_r.at<double>(0, 1) = 0.1542;
 		H_r.at<double>(0, 2) = -0.0066;
 		H_r.at<double>(1, 0) = -0.0590;
 		H_r.at<double>(1, 1) = 0.9918;
-		H_r.at<double>(1, 2) = 0.0002;
-		H_r.at<double>(2, 0) = -0.0616;
-		H_r.at<double>(2, 1) = -0.0058;
-		H_r.at<double>(2, 2) = 0.9994;
+		H_r.at<double>(1, 2) = 0.0001;
+		H_r.at<double>(2, 0) = -0.0615;
+		H_r.at<double>(2, 1) = -0.0059;
+		H_r.at<double>(2, 2) = 0.9996;
 
 		Mat T1 = Mat(3, 3, CV_64FC1);
 		Mat T2 = Mat(3, 3, CV_64FC1);
