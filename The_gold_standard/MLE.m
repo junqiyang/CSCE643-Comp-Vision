@@ -1,6 +1,6 @@
 function [] = gold_standard_algrithm()
     fid = fopen('point.txt');
-    a = fscanf(fid,'%g %g %g %g',[4 inf]) % It has 4 rows.
+    a = fscanf(fid,'%g %g %g %g',[4 inf])
     fclose(fid);
     fid = fopen('h.txt');
     h = fscanf(fid,'%g %g %g',[9 inf]);
