@@ -1,10 +1,19 @@
 function [] = gold_standard_algrithm()
+<<<<<<< HEAD
     file = fopen('point.txt');
     a = fscanf(file,'%g %g %g %g',[4 inf]) % It has 4 rows.
     fclose(file);
     file = fopen('h.txt');
     h = fscanf(file,'%g %g %g',[9 inf]);
     fclose(file);
+=======
+    fid = fopen('point.txt');
+    a = fscanf(fid,'%g %g %g %g',[4 inf])
+    fclose(fid);
+    fid = fopen('h.txt');
+    h = fscanf(fid,'%g %g %g',[9 inf]);
+    fclose(fid);
+>>>>>>> origin/master
     h=h';
     n=20;
     H0=[ h(1,:) ]
