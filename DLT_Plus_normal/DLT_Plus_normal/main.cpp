@@ -61,8 +61,8 @@ int main(int argc, char** argv) {
 		for (;;) {
 			uchar key = (uchar)waitKey();
 			if (counter > number * 2) {
-				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\input_1.jpg", image_input_1);
-				imwrite("C:\\Users\\roast_000\\Desktop\\hw2_result\\input_2.jpg", image_input_2);
+				imwrite("C:\\Users\\roast_000\\Desktop\\1.jpg", image_input_1);
+				imwrite("C:\\Users\\roast_000\\Desktop\\2.jpg", image_input_2);
 				CvMat *H = cvCreateMat(3, 3, CV_64FC1);
 
 				ofstream myfile;
