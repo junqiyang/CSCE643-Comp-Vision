@@ -11,6 +11,7 @@
 
 void p3p(
 	double fx, double fy, double cx, double cy,
-	double R[4][3][3], double t[4][3],
 	cv::Point2d u, cv::Point2d v, cv::Point2d w,
 	cv::Point3d A, cv::Point3d B, cv::Point3d C);
+
+bool Find_R(const std::vector<cv::Point3d>& WorldP, const std::vector<cv::Point3d>& CamerP,	cv::Mat& R, cv::Mat& T);
