@@ -16,3 +16,6 @@ Mat Find_F(CvPoint2D64f * p1, CvPoint2D64f * p2, int n);
 void Find_E(Mat  F, Mat & e, Mat & ep);
 
 Mat find_p(Mat F,Mat ep);
+
+Mat Find_A(Mat P1, Mat P2, CvPoint2D64f x1, CvPoint2D64f x2);
+Mat three_reconstruct(Mat P1, Mat P2, CvPoint2D64f* x1, CvPoint2D64f* x2, int n);

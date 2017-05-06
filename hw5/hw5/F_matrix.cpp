@@ -66,9 +66,11 @@ Mat Find_F(CvPoint2D64f * p1, CvPoint2D64f * p2, int n) {
 	Mat SVG = Mat(3, 3, CV_64FC1);
 
 	Mat F = Mat(3, 3, CV_64FC1);
+
+
+
 	for (i = 0; i<n; i++)
 	{
-		// each po in ts correspondances crea te an equat ion
 		A.at<double>(i, 0) = p2[i].x * p1[i].x;
 		A.at<double>(i, 1) = p2[i].x * p1[i].y;
 		A.at<double>(i, 2) = p2[i].x;
@@ -87,16 +89,14 @@ Mat Find_F(CvPoint2D64f * p1, CvPoint2D64f * p2, int n) {
 	}
 
 	SVD::compute(Ftmp, SVG, UU, VV, SVD::FULL_UV);
-	std::cout << "F1: " << Ftmp << std::endl;
+
 	DD = Mat::diag(SVG);
 	DD.at<double>(2, 2) = 0;
-	std::cout << "DD: " << DD << std::endl;
-	Mat UU_T = Mat(3, 3, CV_64FC1);
 
-	Ftmp = UU*DD*VV;
+	Ftmp = UU*DD*VV.t();
 	F = T2.t()*Ftmp*T1;
-
 	std::cout << F << std::endl;
+
 	F.at<double>(0, 0) = F.at<double>(0, 0) / F.at<double>(2, 2);
 	F.at<double>(0, 1) = F.at<double>(0, 1) / F.at<double>(2, 2);
 	F.at<double>(0, 2) = F.at<double>(0, 2) / F.at<double>(2, 2);
@@ -112,12 +112,10 @@ Mat Find_F(CvPoint2D64f * p1, CvPoint2D64f * p2, int n) {
 
 
 void Find_E(Mat F, Mat & e, Mat & ep) {
-	Mat E = Mat(3, 1, CV_64FC1);
 	Mat D = Mat(3, 3, CV_64FC1);
 	Mat U = Mat(3, 3, CV_64FC1);
 	Mat V = Mat(3, 3, CV_64FC1);
 	SVD::compute(F, D, U, V, SVD::FULL_UV);
-	std::cout << V << std::endl;
 	for (int i = 0; i < 3; i++) {
 		e.at<double>(i, 0) = V.at<double>(2, i) / V.at<double>(2, 2);
 		ep.at<double>(i, 0) = U.at<double>(2, i) / U.at<double>(2, 2);
@@ -126,17 +124,6 @@ void Find_E(Mat F, Mat & e, Mat & ep) {
 
 
 Mat find_p(Mat F, Mat ep) {
-	Mat P = Mat(3, 3, CV_64FC1);
-	P.at<double>(0, 0) = 1;
-	P.at<double>(0, 1) = 0;
-	P.at<double>(0, 2) = 0;
-	P.at<double>(1, 0) = 0;
-	P.at<double>(1, 1) = 1;
-	P.at<double>(1, 2) = 0;
-	P.at<double>(2, 0) = 0;
-	P.at<double>(2, 1) = 0;
-	P.at<double>(2, 2) = 1;
-
 	Mat epx = Mat(3, 3, CV_64FC1);
 	epx.at<double>(0, 0) = 0;
 	epx.at<double>(0, 1) = -ep.at<double>(2, 0);
@@ -160,4 +147,39 @@ Mat find_p(Mat F, Mat ep) {
 		Pp.at<double>(i, 3) = ep.at<double>(i, 0);
 	}
 	return Pp;
+}
+
+
+Mat Find_A(Mat P1, Mat P2, CvPoint2D64f x1, CvPoint2D64f x2) {
+	Mat A = Mat(4, 4, CV_64FC1);
+	Mat row1, row2, row3, row4;
+	row1 = x1.x * P1.row(2) - P1.row(0);
+	row2 = x1.y * P1.row(2) - P1.row(1);
+	row3 = x2.x * P2.row(2) - P2.row(0);
+	row4 = x2.x * P2.row(2) - P2.row(1);
+	row1.copyTo(A.row(0));
+	row2.copyTo(A.row(1));
+	row3.copyTo(A.row(2));
+	row4.copyTo(A.row(3));
+	return A;
+}
+
+Mat three_reconstruct(Mat P1, Mat P2, CvPoint2D64f* x1, CvPoint2D64f* x2, int n) {
+	Mat result = Mat(n, 3, CV_64FC1);
+	for (int i = 0; i < n; i++) {
+		Mat A = Find_A(P1, P2, x1[i], x2[i]);
+		Mat D, U, V;
+		SVD::compute(A, D, U, V, SVD::FULL_UV);
+		double x1 = V.at<double>(3, 0);
+		double x2 = V.at<double>(3, 1);
+		double x3 = V.at<double>(3, 2);
+		double x4 = V.at<double>(3, 3);
+		
+		Mat X = V.row(3);
+		result.at<double>(i, 0) = x1 / x4;
+		result.at<double>(i, 1) = x2 / x4;
+		result.at<double>(i, 2) = x3 / x4;
+
+	}
+	return result;
 }

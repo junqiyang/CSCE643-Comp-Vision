@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 		cvSetMouseCallback("window", on_mouse);
 		for (;;) {
 			uchar key = (uchar)waitKey();
-			if (counter > number * 2) {
+			if (counter > number * 2 - 1) {
 				imwrite("C:\\Users\\roast_000\\Desktop\\1.jpg", image_input_1);
 				imwrite("C:\\Users\\roast_000\\Desktop\\2.jpg", image_input_2);
 				CvMat *H = cvCreateMat(3, 3, CV_64FC1);
@@ -69,9 +69,14 @@ int main(int argc, char** argv) {
 				myfile.open("C:\\Users\\roast_000\\Desktop\\hw2_result\\points.txt");
 
 				for (int i = 0; i < number; i++) {
-					myfile << (double)old_point[i].x << " " << (double)old_point[i].y << endl;
-					myfile << (double)new_point[i].x << " " << (double)new_point[i].y << endl;
+					myfile << (double)old_point[i].x << "," << (double)old_point[i].y << ";" << endl;
 				}
+
+				for (int i = 0; i < number; i++) {
+					myfile << (double)new_point[i].x << "," << (double)new_point[i].y << ";" << endl;
+				}
+
+
 
 				myfile.close();
 
